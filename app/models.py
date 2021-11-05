@@ -18,6 +18,7 @@ class User(UserMixin,db.Model):
     username = db.Column(db.String(255),unique = True,nullable = False)
     password_hash = db.Column(db.String(255),nullable = False)
     date_joined  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
+    posts = db.relationship('Pitch', backref='author', lazy='dynamic')
     
     def __repr__(self):
         return f'User {self.username}'
@@ -38,3 +39,15 @@ class User(UserMixin,db.Model):
     def verify_password(self,password):
         return check_password_hash(self.password_hash,password)
 
+
+class Pitch(db.Model):
+    __tablename__ = 'pitches'
+    id = db.Column(db.Integer,primary_key = True)
+    category = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.String(255), nullable=False)
+    date_posted  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable = False)
+    
+    
+    def __repr__(self):
+        return f'Pitch {self.category}{self.content}'
