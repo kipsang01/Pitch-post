@@ -1,9 +1,17 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-
-
+db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
+    
+
+
+    
+    #initializing database
+    db.init_app(app)
+    migrate = Migrate(app,db)
     
     #Registering blueprints
     from .main import main as main_blueprint

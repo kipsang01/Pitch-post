@@ -1,5 +1,6 @@
-from flask import render_template, redirect,url_for,request
+from flask import render_template, redirect,url_for,request,flash
 from . import auth
+from ..models import User
 from .forms import  RegistrationForm, LoginForm
 
 
@@ -22,12 +23,12 @@ def login():
 @auth.route('/register',methods = ["GET","POST"])
 def register():
     form = RegistrationForm()
-    # if request.method == 'POST':
-    #     if form.validate_on_submit():
-    #         user = User(name= form.name.data,email = form.email.data, username = form.username.data, password = form.password.data)
-    #         user.save_user()
-    #         flash('Registered successfully')
-    #         return redirect(url_for('auth.login'))
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User(name= form.name.data,email = form.email.data, username = form.username.data, password = form.password.data)
+            user.save_user()
+            flash('Registered successfully')
+            return redirect(url_for('auth.login'))
     return render_template('register.html', form = form)
 
 
