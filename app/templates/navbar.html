@@ -17,7 +17,13 @@
           </li>
         </ul>
         <form class="d-flex">
-          
+          {% if current_user.is_authenticated %}
+                  <span class = "">{{current_user.username}}</span>
+                  <span><a class="nav-link text-danger" href="{{url_for('auth.logout')}}">Sign out</a></span>
+                  {% else %}
+                  <span ><a class="nav-link" href="{{url_for('auth.register')}}">Register</a></span>
+                  <span><a class="nav-link text-success" href="{{url_for('auth.login')}}">Sign in</a></span>
+                  {%endif%}
         </form>
       </div>
     </div>
