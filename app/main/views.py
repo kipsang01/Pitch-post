@@ -1,7 +1,9 @@
+from flask import render_template,url_for
 from . import main
 
 
 
 @main.route('/')
+@main.route('/home')
 def index():
-    return '<h1> the post</h1>'
+    return render_template('home.html')
