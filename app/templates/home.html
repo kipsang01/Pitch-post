@@ -2,4 +2,9 @@
 {% block body%}
 <h1>Posts</h1>
 
+{% for pitch in pitches %}
+    {{pitch.userId}}
+    {{pitch.content }}
+    <small>{{ pitch.date_posted}}</small>
+{% endfor%}
 {% endblock%}

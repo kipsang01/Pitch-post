@@ -14,11 +14,15 @@ class User(UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer,primary_key = True)
     name  = db.Column(db.String(255), nullable=False)
+    bio = db.Column(db.String(255))
+    profile_pic = db.Column(db.String(255))
     email = db.Column(db.String(255),unique = True, nullable = False)
     username = db.Column(db.String(255),unique = True,nullable = False)
     password_hash = db.Column(db.String(255),nullable = False)
     date_joined  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
     posts = db.relationship('Pitch', backref='author', lazy='dynamic')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    
     
     def __repr__(self):
         return f'User {self.username}'
@@ -47,6 +51,8 @@ class Pitch(db.Model):
     content = db.Column(db.String(255), nullable=False)
     date_posted  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable = False)
+    comments = db.relationship('Comment', backref='pitch', lazy='dynamic')
+    
     
     
     def __repr__(self):
@@ -56,3 +62,16 @@ class Pitch(db.Model):
     def save_pitch(self):
         db.session.add(self)
         db.session.commit()
+        
+        
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer,primary_key = True)
+    content = db.Column( db.String(255))
+    date_posted  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'),nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable = False)
+    
+    
+    def __repr__(self):
+        return f'Comment {self.category}{self.content}'

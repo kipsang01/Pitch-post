@@ -1,4 +1,4 @@
-from flask import render_template,url_for,request,flash,redirect
+from flask import render_template,url_for,request,flash,redirect,abort
 from . import main
 from .forms import  PitchForm
 from ..models import Pitch
@@ -9,7 +9,10 @@ from flask_login import login_required,current_user
 @main.route('/')
 @main.route('/home')
 def index():
-    return render_template('home.html')
+    pitches = Pitch.query.all()
+    if pitches is None:
+        abort(404)
+    return render_template('home.html', pitches = pitches)
 
 @main.route('/add-pitch', methods = ['GET','POST'])
 @login_required
