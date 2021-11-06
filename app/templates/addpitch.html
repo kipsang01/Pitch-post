@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+{% block body%}
+
+<div class="form w-50 m-auto shadow p-3 mt-3 bg-body rounded">
+    <div class="header text-success text-center">
+        <h1>ADD A PITCH</h1>
+    </div>
+    <form method="POST" action="" >
+        {{ form.csrf_token }}
+        <div class=" shadow-sm p-1 mb-2 bg-body rounded">
+            {{ form.category.label (class='form-label') }} {{ form.category (class='form-control form-check')}} 
+        </div>
+        <div class="shadow-sm p-1 mb-2 bg-body rounded">
+            {{ form.content.label (class='form-label') }} {{ form.content (class='form-control')}}
+            </div>
+        {{form.submit (class='btn btn-success')}}
+    </form>
+
+</div>
+
+{% endblock%}
