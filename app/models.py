@@ -51,7 +51,7 @@ class Pitch(db.Model):
     content = db.Column(db.String(255), nullable=False)
     date_posted  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable = False)
-    comments = db.relationship('Comment', backref='pitch', lazy='dynamic')
+    comments = db.relationship('Comment', backref='pitch', lazy='joined')
     
     
     
@@ -75,3 +75,7 @@ class Comment(db.Model):
     
     def __repr__(self):
         return f'Comment {self.category}{self.content}'
+    
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()

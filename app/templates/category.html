@@ -1,0 +1,11 @@
+
+{% extends 'home.html'%}
+{% block content%}
+    {% for pitch in pitches %}
+        <div class="card">
+            <div class="card-header"><strong> {{pitch.author.name | capitalize}}</strong> @{{pitch.author.username}} <br> <small class = "text-muted">{{ pitch.date_posted.strftime('%d-%m-%Y')}}</small></div>
+            <div class="card-body"> {{pitch.content }} </div>
+            <span><a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comment</a></span>
+        </div>
+    {% endfor%}
+{%endblock%}

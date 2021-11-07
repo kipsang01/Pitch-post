@@ -1,10 +1,33 @@
 {% extends 'base.html'%}
 {% block body%}
-<h1>Posts</h1>
-
-{% for pitch in pitches %}
-    {{pitch.userId}}
-    {{pitch.content }}
-    <small>{{ pitch.date_posted}}</small>
-{% endfor%}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-2">
+            <h3>Categories</h3>
+            <div class=" d-flex flex-column bd-highlight mb-3">
+                <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'Interview')}}">Interview</a></div> <br>
+                <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'Product')}}">Product</a></div> <br>
+                <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'Promotion')}}">Promotion</a></div> <br>
+                <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'PickUP')}}">Pickup</a></div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <h2>Home</h2>
+            <hr>
+            <div class="posts w-75">
+                {% block content%}
+                {% for pitch in pitches %}
+                    <div class="card">
+                        <div class="card-header"><strong> {{pitch.author.name | capitalize}}</strong> @{{pitch.author.username}} <br> <small class = "text-muted">{{ pitch.date_posted.strftime('%d-%m-%Y')}}</small></div>
+                        <div class="card-body"> {{pitch.content }} </div>
+                        <span><a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comment</a></span>
+                    </div>
+                {% endfor%}
+                {%endblock%}
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+    
 {% endblock%}

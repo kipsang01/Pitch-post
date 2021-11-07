@@ -1,15 +1,6 @@
-/* .header{
-    background: hsla(132, 79%, 68%, 1);
-
-    background: linear-gradient(360deg, hsla(132, 79%, 68%, 1) 0%, hsla(101, 53%, 59%, 1) 75%);
-    
-    background: -moz-linear-gradient(360deg, hsla(132, 79%, 68%, 1) 0%, hsla(101, 53%, 59%, 1) 75%);
-    
-    background: -webkit-linear-gradient(360deg, hsla(132, 79%, 68%, 1) 0%, hsla(101, 53%, 59%, 1) 75%);
-    
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#6eee87", endColorstr="#82CD5E", GradientType=1 );
-    } */
-
-body{
-    background-color: #cccccc;
+.category-link a{
+    text-decoration: none;
+}
+ul li a{
+    text-decoration: none
 }

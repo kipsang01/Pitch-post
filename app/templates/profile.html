@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{% block body%}
+    <div class="header text-success text-center">
+        <h1>Profile</h1>
+    </div>
+    <div class="profile d-flex flex-row">
+         <div class="profile-info">
+            <h2>{{ user.name }}</h2>
+            <span>{{user.profile_pic}}</span>
+            <p> {{user.bio}} </p>
+         </div>
+         <div class="posts">
+             {% for post in user.posts%}
+                <div class="card">
+                    Category:{{post.category}} <br>
+                    {{ post.content}}
+                </div>
+             {% endfor%}
+         </div>
+        
+       
+        
+        
+    </div>
+{% endblock%}

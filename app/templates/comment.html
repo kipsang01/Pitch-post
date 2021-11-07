@@ -1,0 +1,37 @@
+{% extends 'base.html'%}
+{% block body%}
+<div class="row">
+    <div class="col-md-7">
+        <div class=" w-75 m-auto shadow p-3 mt-5 bg-body rounded">
+            <div class="header text-success text-center">
+                <h1>PITCH</h1>
+            </div>
+            <div class="header"><strong> {{pitch.author.name | capitalize}}</strong> @{{pitch.author.username}} <br><span class="text-muted">  {{ pitch.date_posted.strftime('%d-%m-%Y')}} </span></div>
+            <div class="card-body"> {{pitch.content }} </div>
+            <form method="POST" action="" >
+                {{ form.csrf_token }}
+                <div class=" shadow-sm p-3 mb-2 bg-body rounded">
+                    {{ form.comment.label (class='form-label') }} {{ form.comment (class='form-control')}} 
+                </div>
+                {{form.submit (class='btn btn-success')}}
+            </form>
+            </div>
+    </div>
+    <div class="col-md-5  shadow p-3 mt-5 bg-body rounded">
+        <h4>Comments</h4>
+        {% if pitch.comments%}
+        {% for p_comment in pitch.comments%}
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <h5> {{ p_comment.author.username}}</h5>
+                    <p>{{ p_comment.content }}</p>
+                   <span class="text-muted"> {{ p_comment.date_posted.strftime('%d-%m-%Y') }}</span>
+                </li>
+            </ul>
+        {% endfor%}
+        {%else%}
+            <p class="text-muted"> No comments. Be the first to comment</p>
+        {%endif%}
+    </div>  
+</div>
+{% endblock%}
