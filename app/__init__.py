@@ -1,15 +1,20 @@
 from flask import Flask
+import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
 from flask_login import LoginManager
+from flask_mail import Mail
 from flask_uploads import UploadSet,configure_uploads,IMAGES
 
 db = SQLAlchemy()
 
+mail = Mail()
+
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
+
 photos = UploadSet('photos',IMAGES)
 
 
@@ -20,10 +25,17 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI']=Config.DATABASE_URI
     app.config['UPLOADED_PHOTOS_DEST'] = Config.UPLOADED_PHOTOS_DEST
     
+    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    
 
     
     #initializing database
     db.init_app(app)
+    mail.init_app(app)
     login_manager.init_app(app)
     migrate = Migrate(app,db)
     configure_uploads(app,photos)

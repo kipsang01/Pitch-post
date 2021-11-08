@@ -1,0 +1,3 @@
+Hello {{user.username}}
+Welcome to Pitch-post
+Thank you for registering in pitch-post application. you can start posting and commenting now.Cheers!

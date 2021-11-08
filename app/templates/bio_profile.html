@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+{% block body%}
+<div class=" w-75 m-auto shadow p-3 mt-5 bg-body rounded">
+    <form method="POST" action="" >
+        {{ form.csrf_token }}
+        <div class=" shadow-sm p-3 mb-2 bg-body rounded">
+            {{ form.bio.label (class='form-label') }} {{ form.bio (class='form-control')}} 
+        </div>
+        {{form.submit (class='btn btn-success')}}
+    </form>
+</div>
+{% endblock%}

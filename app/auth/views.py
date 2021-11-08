@@ -3,6 +3,7 @@ from . import auth
 from ..models import User
 from .forms import  RegistrationForm, LoginForm
 from flask_login import login_user,logout_user,login_required
+from ..email import mail_message
 
 
 
@@ -28,6 +29,7 @@ def register():
         if form.validate_on_submit():
             user = User(name= form.name.data,email = form.email.data, username = form.username.data, password = form.password.data)
             user.save_user()
+            mail_message("Welcome to watchlist","welcome",user.email,user=user)
             flash('Registered successfully')
             return redirect(url_for('auth.login'))
     return render_template('register.html', form = form)

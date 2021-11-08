@@ -9,3 +9,9 @@ ul li a{
     width:50%;
     height:50%;
 }
+.btn-small a{
+    text-decoration: none
+}
+a{
+    text-decoration: none
+}

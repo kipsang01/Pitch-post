@@ -1,4 +1,5 @@
 from . import db
+from sqlalchemy import func
 from flask import url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
@@ -34,7 +35,9 @@ class User(UserMixin,db.Model):
         
     def user_commit(self):
         db.session.commit()
-        
+
+
+    
     @property
     def password(self):
         raise AttributeError('You cannot read the password attribute')
@@ -70,6 +73,11 @@ class Pitch(db.Model):
         db.session.commit()
         
         
+    @classmethod   
+    def pitch_comments(self):
+        return db.session.query(Pitch).join(Comment).group_by(Pitch.id).order_by(func.count().desc()).all()
+    
+    
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer,primary_key = True)

@@ -3,30 +3,30 @@
     <div class="header text-success text-center">
         <h1>Profile</h1>
     </div>
-    <div class="profile d-flex flex-row">
-         <div class="profile-info w-50 d-flex flex-column justify-content-center">
+    <div class="profile d-flex flex-row w-75 m-auto shadow p-3 mt-5 bg-body rounded">
+         <div class="profile-info w-50 d-flex flex-column align-items-center ">
             <h2>{{ user.name }}</h2>
-            <!-- {% if user.profile_pic%}
-                 <img src="{{ user.profile_pic }}" alt="profile pic">
+            {% if user.profile_pic%}
+                 <img src="{{url_for('static',filename=user.profile_pic)}}" alt="profile pic" class="img-thumbnail">
             {%else%} 
-                    <img src="{{url_for('static',filename ='images/profile.png')}}" alt="profile pic">
-                    <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
-                        <input type="file"  name="photo" class="form-control" required>
-                        <input type="submit">
-                    </form>
-                     {% endif%} -->
-                     <img src="{{url_for('static',filename=user.profile_pic)}}" alt="" class="img-thumbnail">
-                    <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
-                        <input type="file"  name="photo" class="form-control" required>
-                        <input type="submit">
-                    </form>
+            <img src="{{url_for('static',filename='images/profile.png')}}" alt="" class="img-thumbnail">
+            <form class="w-50" action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
+                <input type="file"  name="photo" class="form-control" required>
+                <input type="submit">
+            </form>
+            {% endif%}
             {%if user.bio%}
-            <p> {{user.bio}} </p>
+                <div class="card w-50 m-1 p-2">
+                    {{user.bio}}
+                </div>
             {%else %}
                 {% if user == current_user%}
-                    <p>Please add bio so others can see about you</p>
-                    {%else%}
-                        <p>No bio</p>
+                <div class="card">
+                    <p class="text-muted">Please add bio so others can see about you</p>
+                    <button class="btn btn-small"><a href="{{ url_for('main.add_bio',uname= current_user.username)}}">Add bio</a></button>
+                </div>
+                {%else%}
+                <p class="text-muted">No bio</p>
                 {%endif%}
             {%endif%}
          </div>
@@ -34,14 +34,10 @@
              <h3>PITCHES</h3>
              {% for post in user.posts%}
                 <div class="card">
-                    Category:{{post.category}} <br>
-                    {{ post.content}}
+                    <div class="card-body">{{ post.content}}</div>
+                    <div class="card-footer">{{post.upvotes}} upvotes {{post.upvotes}}  downvotes comments</div>
                 </div>
              {% endfor%}
-         </div>
-        
-       
-        
-        
+         </div>      
     </div>
 {% endblock%}
