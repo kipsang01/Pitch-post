@@ -16,13 +16,20 @@
             <hr>
             <div class="posts w-75">
                 {% block content%}
-                {% for pitch in pitches %}
-                    <div class="card">
-                        <div class="card-header"><strong> {{pitch.author.name | capitalize}}</strong> @{{pitch.author.username}} <br> <small class = "text-muted">{{ pitch.date_posted.strftime('%d-%m-%Y')}}</small></div>
-                        <div class="card-body"> {{pitch.content }} </div>
-                        <span><a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comment</a></span>
-                    </div>
-                {% endfor%}
+                {%if pitches%}
+                    {% for pitch in pitches %}
+                        <div class="card">
+                            <div class="card-header"><strong> {{pitch.author.name | capitalize}}</strong> @{{pitch.author.username}} <br> <small class = "text-muted">{{ pitch.date_posted.strftime('%d-%m-%Y')}}</small></div>
+                            <div class="card-body"> {{pitch.content }} </div>
+                            <div class="details d-flex flex-row justify-content-around">
+                                <span>{{ pitch.upvotes}} upvotes</span>  <span>{{ pitch.downvotes}} downvotes</span>
+                                <span><a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comment</a></span>
+                            </div>
+                        </div>
+                    {% endfor%}
+                {% else%}
+                        <p class="text-muted">There are no pitches for this category!<br>Be the first one to post</p>
+                {%endif%}
                 {%endblock%}
             </div>
             <hr>

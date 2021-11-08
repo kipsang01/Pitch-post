@@ -1,8 +1,10 @@
 from flask import render_template,url_for,request,flash,redirect,abort
 from . import main
+from .. import photos
 from .forms import  PitchForm,CommentForm
 from ..models import Pitch,User,Comment
 from flask_login import login_required,current_user
+
 
 
 
@@ -20,7 +22,8 @@ def pitch_category(category):
     pitches = Pitch.query.filter_by(category = category).all()
     if pitches is None:
         abort(404)
-    return render_template('category.html', pitches = pitches)
+    title_head = category
+    return render_template('category.html', pitches = pitches, ttle_head = title_head)
 
 
 
@@ -38,10 +41,13 @@ def add_pitch():
     return render_template('addpitch.html', form=form)
 
 
-@main.route('/profile', methods = ['GET','POST'])
+@main.route('/profile/<username>', methods = ['GET','POST'])
 @login_required
-def profile():
-    return render_template('profile.html',user = current_user)
+def profile(username):
+    user  = User.query.filter_by(username=username).first()
+    if  user is None:
+        abort(404)
+    return render_template('profile.html',user = user)
 
 
 @main.route('/<post_id>/comment', methods = ['GET','POST'])
@@ -61,3 +67,14 @@ def comment_post(post_id):
     
     return render_template('comment.html',form=form, pitch = pitch)
 
+
+@main.route('/user/<uname>/update/pic',methods= ['POST'])
+@login_required
+def update_pic(uname):
+    user = User.query.filter_by(username = uname).first()
+    if 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        path = f'images/{filename}'
+        user.profile_pic = path
+        user.user_commit()
+    return redirect(url_for('main.profile',username=uname))

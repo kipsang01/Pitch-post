@@ -4,3 +4,8 @@
 ul li a{
     text-decoration: none
 }
+
+.profile-info img{
+    width:50%;
+    height:50%;
+}

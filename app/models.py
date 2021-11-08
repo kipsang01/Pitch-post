@@ -1,4 +1,5 @@
 from . import db
+from flask import url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
 from flask_login import UserMixin
@@ -31,6 +32,9 @@ class User(UserMixin,db.Model):
         db.session.add(self)
         db.session.commit()
         
+    def user_commit(self):
+        db.session.commit()
+        
     @property
     def password(self):
         raise AttributeError('You cannot read the password attribute')
@@ -50,6 +54,8 @@ class Pitch(db.Model):
     category = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(255), nullable=False)
     date_posted  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
+    upvotes = db.Column(db.Integer,nullable=False, default = 0)
+    downvotes = db.Column(db.Integer,nullable=False, default = 0)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable = False)
     comments = db.relationship('Comment', backref='pitch', lazy='joined')
     
