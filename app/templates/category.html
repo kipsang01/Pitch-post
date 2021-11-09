@@ -7,11 +7,15 @@
     
     {%if pitches %}
         {% for pitch in pitches %}
-            <div class="card">
-                <div class="card-header"><strong> {{pitch.author.name | capitalize}}</strong> @{{pitch.author.username}} <br> <small class = "text-muted">{{ pitch.date_posted.strftime('%d-%m-%Y')}}</small></div>
-                <div class="card-body"> {{pitch.content }} </div>
-                <span><a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comment</a></span>
+        <div class="card">
+            <div class="card-header"><strong> <a href="{{url_for('main.profile', username = pitch.author.username)}}"> {{pitch.author.name | capitalize}}</strong> <i>@{{pitch.author.username}}</i>  </a><br> <small class = "text-muted">{{ pitch.date_posted.strftime('%d-%m-%Y')}}</small></div>
+            <div class="card-body"> {{pitch.content }} </div>
+            <div class="details d-flex flex-row justify-content-around">
+                <span><a href="{{url_for('main.like_action', pitch_id=pitch.id, action='like')}}"><i class="far fa-thumbs-up"></i> {{ pitch.votes |length}}upvotes</a></span>  <span><a href="{{url_for('main.like_action', pitch_id=pitch.id, action='unlike')}}"> <i class="far fa-thumbs-down"></i>downvotes</a></span>
+                <span>{{ pitch.comments | length}}<a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comments</a></span>
             </div>
+            <hr>
+        </div>
         {% endfor%}
     {% else%}
         <p class="text-muted">There are no pitches for this category!<br>Be the first one to post</p>

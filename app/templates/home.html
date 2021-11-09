@@ -2,20 +2,24 @@
 {% block body%}
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-2 sidebar">
+            <div class="position-fixed">
             <h4>Category</h4>
-            <div class=" d-flex flex-column bd-highlight mb-3">
+            <div class=" d-flex flex-column bd-highlight mb-3 ">
                 <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'Interview')}}">Interview</a></div> <br>
                 <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'Product')}}">Product</a></div> <br>
                 <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'Promotion')}}">Promotion</a></div> <br>
                 <div class="category-link"><a href="{{ url_for('main.pitch_category',category = 'PickUP')}}">Pickup</a></div>
             </div>
+            </div>
         </div>
         <div class="col-md-10 shadow p-3 mt-1 bg-body rounded">
-            {%block title%}
-            <h2>Home</h2>
-            {%endblock%}
-            <hr>
+            <div class="head ">
+                {%block title%}
+                <h2>Home</h2>
+                {%endblock%}
+            </div>
+            <hr class="text-success ">
             <div class="posts w-75">
                 {% block content%}
                 {%if pitches%}
@@ -24,9 +28,10 @@
                             <div class="card-header"><strong> <a href="{{url_for('main.profile', username = pitch.author.username)}}"> {{pitch.author.name | capitalize}}</strong> <i>@{{pitch.author.username}}</i>  </a><br> <small class = "text-muted">{{ pitch.date_posted.strftime('%d-%m-%Y')}}</small></div>
                             <div class="card-body"> {{pitch.content }} </div>
                             <div class="details d-flex flex-row justify-content-around">
-                                <span>{{ pitch.upvotes}} upvotes</span>  <span>{{ pitch.downvotes}} downvotes</span>
-                                <span><a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comment</a></span>
+                                <span><a href="{{url_for('main.like_action', pitch_id=pitch.id, action='like')}}"><i class="far fa-thumbs-up"></i> <span class="m-1">{{ pitch.votes |length}}</span>upvotes</a></span>  <span><a href="{{url_for('main.like_action', pitch_id=pitch.id, action='unlike')}}"> <i class="far fa-thumbs-down"></i>downvotes</a></span>
+                                <span>{{ pitch.comments | length}}<a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comments</a></span>
                             </div>
+                            <hr>
                         </div>
                     {% endfor%}
                 {% else%}

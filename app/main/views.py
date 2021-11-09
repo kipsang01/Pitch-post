@@ -1,5 +1,5 @@
 from flask import render_template,url_for,request,flash,redirect,abort
-from sqlalchemy import  func
+from sqlalchemy import  func, desc
 from . import main
 from .. import db
 from .. import photos
@@ -13,7 +13,7 @@ from flask_login import login_required,current_user
 @main.route('/')
 @main.route('/home')
 def index():
-    pitches = Pitch.query.all()
+    pitches = Pitch.query.order_by(desc('date_posted')).all()
     comments_no = Pitch.pitch_comments
     # comments = session.query(Pitch).join(Comment).group_by(Pitch.id).order_by(func.count().desc()).all()
     if pitches is None:
@@ -39,7 +39,7 @@ def add_pitch():
         if form.validate_on_submit():
             new_pitch = Pitch( category=form.category.data, content=form.content.data, user_id = current_user.id)
             new_pitch.save_pitch()
-            flash('pitch posted!')
+            flash('pitch posted!','success')
             return redirect(url_for('main.index'))
             
     return render_template('addpitch.html', form=form)
@@ -64,8 +64,9 @@ def comment_post(post_id):
     if request.method == 'POST':
         if form.validate_on_submit():
             new_comment = Comment( content=form.comment.data, pitch_id = post_id, user_id = current_user.id)
-            new_comment.save_comment()
-            flash('Comment posted!')
+            db.session.add(new_comment)
+            db.session.commit()
+            flash('Comment posted!','success')
             return redirect(url_for('main.comment_post', post_id=post_id))
     
     return render_template('comment.html',form=form, pitch = pitch)
@@ -101,6 +102,38 @@ def add_bio(uname):
     return render_template('bio_profile.html',form=form)
 
 
+@main.route('/pitch/delete/<pitch_id>',methods= ['GET','POST'])
+@login_required
+def delete_pitch(pitch_id):
+    pitch = Pitch.query.filter_by(id = pitch_id).first()
+    if pitch is None:
+        abort(404)
+    try:
+        db.session.delete(pitch)
+        db.session.commit()
+    except:
+        flash('something went wrong try again..', 'danger')
+    
+    return redirect(url_for('.profile',username=current_user.username))
 
-def count_comments():
-    Pitch.pitch_comments
+
+
+@main.route('/upvote/<pitch_id>/<action>', methods=['GET','POST'])
+@login_required
+def like_action(pitch_id,action):
+    pitch = Pitch.query.filter_by(id=pitch_id).first_or_404()
+    pitches = Pitch.query.all()
+    if action == 'like':
+        current_user.like_post(pitch_id)
+        db.session.commit()
+    if action == 'unlike':
+        current_user.unlike_post(pitch_id)
+        db.session.commit()
+    return redirect(request.referrer)
+    
+    #return redirect(url_for('.index',pitches=pitches))
+@main.route('/<id>/likes', methods = ['GET','POST'])
+def count_votes(id):
+    likes = Pitch.query.filter_by(id=id).first()
+    votes= likes.likes.count()
+    return render_template('home.html', votes = votes)

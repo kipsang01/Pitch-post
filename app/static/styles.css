@@ -1,6 +1,9 @@
 .category-link a{
     text-decoration: none;
 }
+*{
+    font-family: 'Poppins', sans-serif;     
+}
 ul li a{
     text-decoration: none
 }
@@ -14,4 +17,7 @@ ul li a{
 }
 a{
     text-decoration: none
+}
+.sidebar{
+    background-color:#ccc
 }

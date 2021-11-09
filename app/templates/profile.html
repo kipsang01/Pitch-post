@@ -32,10 +32,18 @@
          </div>
          <div class="posts">
              <h3>PITCHES</h3>
-             {% for post in user.posts%}
+             {% for pitch in user.posts%}
                 <div class="card">
-                    <div class="card-body">{{ post.content}}</div>
-                    <div class="card-footer">{{post.upvotes}} upvotes {{post.upvotes}}  downvotes comments</div>
+                    <div class="card-body">{{ pitch.content}}
+                        <div class="details d-flex flex-row justify-content-around card-footer">
+                            <span><a href="{{url_for('main.like_action', pitch_id=pitch.id, action='like')}}"><i class="far fa-thumbs-up"></i> {{ pitch.votes |length}}upvotes</a></span>  <span><a href="{{url_for('main.like_action', pitch_id=pitch.id, action='unlike')}}"> <i class="far fa-thumbs-down"></i>downvotes</a></span>
+                            <span>{{ pitch.comments | length}}<a style="text-decoration:none" href="{{ url_for('main.comment_post',post_id = pitch.id)}}">comments</a>
+                                {% if pitch.user_id == current_user.id%}
+                                <a href="{{ url_for('main.delete_pitch',pitch_id = pitch.id)}}"><i class="fas fa-trash"></i></a>
+                                {%endif%}
+                            </span>
+                        </div>
+                    </div>
                 </div>
              {% endfor%}
          </div>      

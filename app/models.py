@@ -24,7 +24,7 @@ class User(UserMixin,db.Model):
     date_joined  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
     posts = db.relationship('Pitch', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
-    
+    votes = db.relationship('Vote', backref='author', lazy='dynamic')
     
     def __repr__(self):
         return f'User {self.username}'
@@ -35,6 +35,22 @@ class User(UserMixin,db.Model):
         
     def user_commit(self):
         db.session.commit()
+        
+    def like_post(self, pitch):
+        if not self.has_liked_post(pitch):
+            vote = Vote(user_id=self.id, pitch_id=pitch)
+            db.session.add(vote)
+
+    def unlike_post(self, pitch):
+        if self.has_liked_post(pitch):
+            Vote.query.filter_by(
+                user_id=self.id,
+                pitch_id=pitch).delete()
+
+    def has_liked_post(self, pitch):
+        return Vote.query.filter(
+                Vote.user_id == self.id,
+                Vote.pitch_id == pitch).count() > 0
 
 
     
@@ -57,10 +73,10 @@ class Pitch(db.Model):
     category = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(255), nullable=False)
     date_posted  = db.Column(db.DateTime,nullable = False,default=datetime.utcnow())
-    upvotes = db.Column(db.Integer,nullable=False, default = 0)
-    downvotes = db.Column(db.Integer,nullable=False, default = 0)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable = False)
-    comments = db.relationship('Comment', backref='pitch', lazy='joined')
+    comments = db.relationship('Comment', backref='pitch', lazy='joined' , cascade="all, delete")
+    votes = db.relationship('Vote', backref='pitch', lazy = 'joined')
+    
     
     
     
@@ -71,6 +87,8 @@ class Pitch(db.Model):
     def save_pitch(self):
         db.session.add(self)
         db.session.commit()
+        
+   
         
         
     @classmethod   
@@ -90,6 +108,13 @@ class Comment(db.Model):
     def __repr__(self):
         return f'Comment {self.category}{self.content}'
     
-    def save_comment(self):
-        db.session.add(self)
-        db.session.commit()
+    
+class Vote(db.Model):
+    __tablename__ = 'votes'
+    id = db.Column(db.Integer,primary_key = True)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'),nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable = False)
+    
+    
+    def __repr__(self):
+        return f'Vote {self.pitch_id}{self.user_id}'
