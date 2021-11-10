@@ -2,7 +2,8 @@
 Pitch app is a web application that allowa users to post short pitches and others comments and give upvoteor downvote
 
 
-##Description
+## Description
+
 It has authentication that allow users to register and login.
 Has form for users to enter pitch
 Has like and unlike button and section to comment
