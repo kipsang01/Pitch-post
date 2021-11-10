@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from config import  DevConfig, config_options
+from config import  DevConfig, config_options,ProdConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
@@ -26,7 +26,7 @@ def create_app():
     # config_options[config_name].init_app(app)
     
     app.config['SECRET_KEY']= os.environ.get('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI']= DevConfig.DATABASE_URI
+    app.config['SQLALCHEMY_DATABASE_URI']= ProdConfig.DATABASE_URI
     app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/images'
 
     
