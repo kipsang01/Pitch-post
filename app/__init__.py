@@ -25,9 +25,10 @@ def create_app():
     #app.config.from_object(config_options[config_name])
     # config_options[config_name].init_app(app)
     
-    app.config['SECRET_KEY']= Config.SECRET_KEY
+    app.config['SECRET_KEY']= os.environ.get('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI']= DevConfig.DATABASE_URI
-    app.config['UPLOADED_PHOTOS_DEST'] = Config.UPLOADED_PHOTOS_DEST
+    app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/images'
+
     
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
