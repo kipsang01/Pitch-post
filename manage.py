@@ -9,7 +9,7 @@ from flask_script import Manager
 
 
 
-app = create_app('production')
+app = create_app()
 
 
 with app.app_context():

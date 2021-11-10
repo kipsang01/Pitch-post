@@ -1,8 +1,9 @@
 import os
 
 class Config():
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    DATABASE_URI = os.environ.get('DATABASE_URI')
+    SECRET_KEY = 'secret key'
+    DATABASE_URI = 'postgresql+psycopg2://moringa:czar@localhost/pitch'
+
     UPLOADED_PHOTOS_DEST ='app/static/images'
 
 

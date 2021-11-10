@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from config import  config_options
+from config import  DevConfig, config_options
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
@@ -19,14 +19,14 @@ login_manager.login_view = 'auth.login'
 photos = UploadSet('photos',IMAGES)
 
 
-def create_app(config_name):
+def create_app():
     app = Flask(__name__)
     
-    app.config.from_object(config_options[config_name])
+    #app.config.from_object(config_options[config_name])
     # config_options[config_name].init_app(app)
     
     app.config['SECRET_KEY']= Config.SECRET_KEY
-    app.config['SQLALCHEMY_DATABASE_URI']=Config.DATABASE_URI
+    app.config['SQLALCHEMY_DATABASE_URI']= DevConfig.DATABASE_URI
     app.config['UPLOADED_PHOTOS_DEST'] = Config.UPLOADED_PHOTOS_DEST
     
     MAIL_SERVER = 'smtp.googlemail.com'
