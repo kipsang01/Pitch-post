@@ -23,7 +23,7 @@ def create_app(config_name):
     app = Flask(__name__)
     
     app.config.from_object(config_options[config_name])
-    config_options[config_name].init_app(app)
+    # config_options[config_name].init_app(app)
     
     app.config['SECRET_KEY']= Config.SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI']=Config.DATABASE_URI
