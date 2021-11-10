@@ -26,7 +26,7 @@ def create_app():
     # config_options[config_name].init_app(app)
     
     app.config['SECRET_KEY']= os.environ.get('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI']= ProdConfig.DATABASE_URI
+    app.config['SQLALCHEMY_DATABASE_URI']= ProdConfig.SQLALCHEMY_DATABASE_URI
     app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/images'
 
     
