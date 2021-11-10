@@ -1,5 +1,6 @@
 from flask import Flask
 import os
+from config import  config_options
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
@@ -18,8 +19,11 @@ login_manager.login_view = 'auth.login'
 photos = UploadSet('photos',IMAGES)
 
 
-def create_app():
+def create_app(config_name):
     app = Flask(__name__)
+    
+    app.config.from_object(config_options[config_name])
+    config_options[config_name].init_app(app)
     
     app.config['SECRET_KEY']= Config.SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI']=Config.DATABASE_URI
@@ -35,8 +39,11 @@ def create_app():
     
     #initializing database
     db.init_app(app)
+    
     mail.init_app(app)
+    
     login_manager.init_app(app)
+    
     migrate = Migrate(app,db)
     configure_uploads(app,photos)
      

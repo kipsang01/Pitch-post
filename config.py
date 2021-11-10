@@ -1,6 +1,8 @@
+import os
+
 class Config():
-    SECRET_KEY = 'my secret key'
-    DATABASE_URI = 'postgresql+psycopg2://moringa:czar@localhost/pitch'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    DATABASE_URI = os.environ.get('DATABASE_URI')
     UPLOADED_PHOTOS_DEST ='app/static/images'
 
 
@@ -11,7 +13,7 @@ class DevConfig(Config):
     DEBUG = True
     
 class ProdConfig(Config):
-    pass
+    DATABASE_URI = os.environ.get("DATABASE_URL")
 
 config_options = {
 'development':DevConfig,

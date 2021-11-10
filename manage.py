@@ -9,14 +9,11 @@ from flask_script import Manager
 
 
 
-app = create_app()
-
-# app.config['SECRET_KEY']= Config.SECRET_KEY
-# app.config['SQLALCHEMY_DATABASE_URI']=Config.DATABASE_URI
+app = create_app('production')
 
 
 with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()
